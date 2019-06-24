@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>home</title>
+	<!--<link rel="stylesheet" href="https://js.arcgis.com/3.26/esri/themes/calcite/dijit/calcite.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.26/esri/themes/calcite/esri/esri.css">
+	<link rel="stylesheet" href="https://js.arcgis.com/3.26/dijit/themes/claro/claro.css">-->
+	
+	<link rel="stylesheet" type="text/css" href="http://localhost/arcgis_js_api/library/3.26/3.26/esri/themes/calcite/dijit/calcite.css" />
+	<link rel="stylesheet" type="text/css" href="http://localhost/arcgis_js_api/library/3.26/3.26/dijit/themes/claro/claro.css" />
+    <link rel="stylesheet" type="text/css" href="http://localhost/arcgis_js_api/library/3.26/3.26/dijit/themes/tundra/tundra.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/arcgis_js_api/library/3.26/3.26/esri/css/esri.css" />
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+    <link href="assets/css/basic.css" rel="stylesheet" />
+    <link href="assets/css/custom.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="#" />
+	<style>
+             
+        .base-map{
+            position: absolute;
+            right: 20pt;
+            top:10pt;
+            background: #f0f0f0;
+            border: #96aed1 1px solid;
+            width: auto;
+            height: auto;
+            z-index: 99;
+            font:normal 18px "宋体",Arial;
+            color:#868686;
+        }
+		.but {
+            position: absolute;
+            right:50px;
+        }
+        #titlePane{
+        width:230px;
+      }
+		#BasemapToggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 50;
+	  }
+	  #extent{
+		width: 200px; 
+		height: 100px; 
+		position: absolute; 
+		bottom: 0; 
+		
+		background-color: white; 
+		z-index:16;
+      }
+	  .bookmark-container {
+        position: absolute;
+        top: 100px;
+        left: 15px;
+        padding: 1rem;
+        background: #ffffff;
+        border-radius: 4px;
+        border: 1px solid #eeeeee;
+      }
+	  #basemapGallery
+      {
+      	width: 500px;
+      	height: 200px;     	
+		float: right;
+      	z-index: 2;
+		position: absolute; 
+      }
+	  #legendPane {
+      border: solid #97DCF2 1px;
+    }
+	  #legend
+      {
+	    border: solid #97DCF2 1px;
+        width: 100px;
+      	height: 50px;
+      	
+        float: center;
+      	z-index: 5;
+      	border: 1px solid black;
+      	background-color:white;
+      }
+	   th,td{
+            padding: 0px;
+            border:1px solid #000;
+        }
+
+    #legendPane {
+      border: solid #97DCF2 1px;
+    }      
+	.nav li a{
+	 cursor:pointer;
+	}
+	#constainer {
+            position:absolute;
+            z-index:998;
+            right:260px;
+            top:100px;
+			text-align:center;
+			font-size:14px;
+            height:110px;
+            width:190px;
+            background-color:white
+        }
+        .controler {
+            <!--position: absolute;--> 
+			float;right;
+			 margin:0 auto;
+			text-align:center;
+            z-index: 999;
+        }
+
+        #blurControl {
+            right: 3px;
+            top: 20px;
+        }
+
+        #maxControl {
+            right: 3px;
+            top: 50px;
+        }
+
+        #minControl {
+            right: 3px;
+            top: 80px;
+        }
+    </style>
+	
+  
+		
+</head>
+<body>
+         <!-- 这块儿是内容  -->
+    <div id="wrapper">
+        <div class="navbar navbar-default navbar-cls-top "  style="margin-bottom: 0">
+            <div class="navbar-header">               
+                <a class="navbar-brand" href="index.html">欢迎来到环境之家——PM2.5监测网站</a>
+            </div>
+			 <div  style="  padding: 19px 500px 19px 268px "  >       
+			<label><input id="dian" type="checkbox"  onclick="setVisibility()" checked=""/>底图</label>
+          <label><input id="xian" type="checkbox"  onclick="setVisibility()" checked=""/>操作图层</label>	
+             <button id="btn1"  class="btn">放大</button>
+       <button id="btn2"  class="btn">漫游</button>
+       <button id="btn3"  class="btn">缩小</button>
+       <button id="btn4"  class="btn">全图</button>
+       <button id="btn5"  class="btn">上一视图</button>
+       <button id="btn6"  class="btn">下一视图</button> 
+	   <button id="btn7"  class="btn">左移</button>
+       <button id="btn8"  class="btn">右移</button>    
+       <button id="btn9"  class="btn">中心点</button>
+	   
+		<div style="position:absolute; right:70px; top:20px; z-Index:99; background-color:transparent "> 
+		<input id="serach" type="text" name="name1"  placeholder="请输入查询内容" value=" " />
+		 <input type="button" name="name" id="attrSerach" value="属性查询 " />
+		 <input type="button" name="name" id="Find" value="模糊查询 " />
+		 <input type="button" name="name" id="scs" value="空间查询 " />		 
+		 <input type="button" name="name" id="del" value="清除 " /> 
+		 		 		 
+		 </div>
+		
+        </div>
+			
+		</div>
+        <!-- /. NAV TOP  -->
+        <nav class="navbar-default navbar-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+                    <li>
+                        <div class="user-img-div">
+                            <img src="assets/img/hong.jpg" class="img-thumbnail" />
+
+                            <div class="inner-text">
+                                向 洋弘
+                       
+                                <small>2019年3月12日登录 </small>
+                            </div>
+                        </div>
+
+                    </li>
+
+
+                    <li>
+                        <a class="active-menu" > <i class="fa fa-sitemap "></i>数据视图</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-sitemap "></i>几何绘制 <span class="fa arrow"></span></a>
+                         <ul class="nav nav-second-level" id="draw">
+                          
+                        <li><a id="point">点</a></li>
+                        <li><a id="Line">线</a></li>
+                        <li><a id="Polygon">面</a></li>
+                        <li><a id="multipoint">多点</a></li>
+                        <li><a id="FreehandPolyline">自由线</a></li>
+                        <li><a id="FreehandPolygon">自由面</a></li>
+                        <li><a id="Circle">圆形</a></li>
+                        <li><a id="Extent">矩形</a></li>
+                          
+                            <li>
+                                <a href="#">交互绘制<span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    
+                                        <li><a class="city-point">城市点分布</a></li>
+										<li><a class="city-line">城市线分布</a></li>
+										<li><a class="city-polygin">城市面分布</a></li>
+	
+                                </ul>
+
+                            </li>
+                        </ul>
+                    </li>
+                   
+                     <li>
+                        <a href="#"><i class="fa fa-yelp "></i>地图小部件 <span class="fa arrow"></span></a>
+                         <ul class="nav nav-second-level">
+                            
+                               <li> <a id= "CBasemapGallery">地图长廊</a> </li>
+							   <li> <a id= "qiehuanqi">底图切换器</a> </li> 
+                               <li> <a id= "CBookmarks">书签</a></li>
+							   <li> <a id= "Cmeasurement">测量工具</a> </li>
+							   <li> <a id= "fanwei1">地图范围</a> </li>
+							   <li> <a id= "zuobiao1">地图坐标</a> </li>
+							   
+                                                     
+                           
+                        </ul>
+                    </li>
+                    
+                    <li>
+                        <a href="#"><i class="fa fa-bicycle "></i>专题图渲染 <span class="fa arrow"></span></a>
+                         <ul class="nav nav-second-level">
+                           
+                             <li> <a id ="simpleRender1"><i class="fa fa-desktop "></i>唯一值渲染 </a> </li>
+                             <li>
+                                <a id ="simpleRender2"><i class="fa fa-desktop "></i>分级符号渲染</a>
+                            </li>
+                             <li>
+                                <a id ="simpleRender3"><i class="fa fa-desktop "></i>点密度渲染</a>
+                            </li>
+                             <li>
+                                <a id ="simpleRender4"><i class="fa fa-desktop "></i>热力图渲染</a>
+                            </li>
+                             <li>
+                                <a id="printButton"><i class="fa fa-desktop "></i>打印</a>
+                            </li>
+                             
+                           
+                        </ul>
+                          
+                    </li>
+                     <li>
+                        <a href="#"><i class="fa fa-desktop "></i>缓冲区分析 <span class="fa arrow"></span></a>
+                         <ul class="nav nav-second-level" id="toolbar"  >
+                            <li>
+                                <a id="line" class="toolbar" ><i class="fa fa-toggle-on"></i>线缓冲区</a>
+                            </li>
+                            <li>
+                                <a id="polyline" class="toolbar"><i class="fa fa-bell "></i>面缓冲区</a>
+                            </li>
+                             <li>
+                                <a id="freehandpolyline" class="toolbar"><i class="fa fa-circle-o "></i>自由线缓冲区</a>
+                            </li>
+                             <li>
+                                <a id="polygon" class="toolbar"><i class="fa fa-code "></i>面缓冲区</a>
+                            </li>
+                            <li>
+                                <a id="freehandpolygon" class="toolbar"><i class="fa fa-bell "></i>自由面缓冲区</a>
+                            </li>
+                            <li>
+                                <a id="clearGraphics"><i class="fa fa-circle-o "></i>清除</a>
+                            </li>
+                              <!--<li>
+                                <a href="#"><i class="fa fa-code "></i>最短路径</a>
+                            </li>-->
+                             
+                        </ul>
+                    </li>
+                      <li>
+                        <a href="#"><i class="fa fa-flash "></i>在线编辑  </a>
+                        
+                    </li>
+                    
+                    <li>
+                        <a href="login.html"><i class="fa fa-sign-in "></i>登录</a>
+                    </li>
+                               
+                    
+                </ul>
+                </ul>
+
+            </div>
+
+        </nav>
+        <!-- 这块儿是底图  -->
+		
+        <div id="page-wrapper" style="padding: 15px 15px; min-height: 400px; background: #F3F3F3;" >
+		
+		<div id="biaoge" style="position:absolute; overflow:auto ; height=300px; width=230px; right:20px; top:210px; z-Index:999; background-color:white;display:none" >	
+			<table>
+        <tbody id="infoBody">
+		<thead>
+            <tr>
+                <th width="80px">城市名</th>
+                <th width="80px">监测点</th>
+                <th width="60px">PM2_5</th>
+            </tr>
+        </thead>
+        </tbody>		
+    </table>
+	</div>
+	    <!--热力图渲染-->
+		<div id="constainer" style="display:none"  >
+	     热力图渲染器
+        <input class="controler" id="blurControl" type="range" max=30 min=0 value=3 step=1 />
+        <input class="controler" id="maxControl" type="range" max=500 min=0 value=100 step=10 />
+        <input class="controler" id="minControl" type="range" max=500 min=0 value=10 step=10 />
+		</div>
+		<!--底图切换器-->
+		<div id="ditu" style="position:absolute; right:665px; top:85px; z-Index:999; background-color:transparent;display:none " >
+		<div id="BasemapToggle"  ></div>
+		</div>
+		<!--底图长廊-->
+		<div id="changlang" style="position:absolute; left:270px; top:100px; z-Index:99; background-color:transparent;display:none ">
+		<div id="basemapGallery" ></div>
+		</div>
+		<!--坐标显示 -->
+		<div id="coordinate" style="width: 290px; position: absolute; border:2px; background-color: red; z-index:80; left:276px; top:622px; display:none" > 	</div>
+		<!--范围显示 -->
+	   <div id="fanwei" style="position:absolute; left:276px; top:750px; z-Index:999; background-color:white;display:none ">    
+	   <div id="extent" ></div> 
+	   </div>
+	   <!--测量显示-->
+       <div id="ceiliang" style="position:absolute; right:10px; top:100px; z-Index:999; background-color:white;display:none">
+          <div id="titlePane" data-dojo-type="dijit/TitlePane" data-dojo-props="title:'Measurement', closable:false">
+            <div id="measurement"> </div>          
+          </div>
+        </div>   
+	 <!--书签显示-->
+	 <div id="shuqian" style="position:absolute; right:460px; top:110px; z-Index:999; background-color:white;display:none ">  
+	      <div id="bookmarks"></div> 
+	 </div>
+									
+            <div id="map"  style=" position: relative; width:1239px; height:670px; border:1px; padding: 0; margin: 0; solid #000;"  >   </div>
+		<div id="table" style="position:absolute; right:10px; z-Index:999; background-color:white; transparent" ></div>
+		
+        <!-- /. PAGE WRAPPER  -->
+    </div>
+  
+    <script src="assets/js/jquery-1.10.2.js"></script>
+    <!-- BOOTSTRAP SCRIPTS -->
+    <script src="assets/js/bootstrap.js"></script>
+    <!-- METISMENU SCRIPTS -->
+    <script src="assets/js/jquery.metisMenu.js"></script>
+       <!-- CUSTOM SCRIPTS -->
+    <script src="assets/js/custom.js"></script>
+    
+
+
+</body>
+<script src="js/china.js"></script>
+	<script type="text/javascript" src="http://localhost/arcgis_js_api/library/3.26/3.26/init.js"></script>
+    <script type="text/javascript">
+	var tb;
+       require(["esri/map",   
+        "esri/layers/ArcGISTiledMapServiceLayer",
+        "esri/layers/LayerInfo",
+        "esri/layers/ArcGISDynamicMapServiceLayer",
+		"esri/layers/FeatureLayer",
+		"esri/renderers/UniqueValueRenderer",
+		"esri/renderers/SimpleRenderer",
+		"esri/renderers/ClassBreaksRenderer",
+		"esri/renderers/HeatmapRenderer",
+		"esri/renderers/ScaleDependentRenderer",
+		"esri/renderers/DotDensityRenderer",
+        "esri/toolbars/navigation",		
+        "esri/dijit/OverviewMap",
+        "esri/dijit/BasemapGallery",
+        "esri/dijit/BookmarkItem",
+        "esri/dijit/Bookmarks",
+        "esri/geometry/Point",
+        "dojo/dom",
+		"esri/tasks/FindTask",
+		"esri/tasks/FindParameters",
+		"esri/tasks/IdentifyTask",
+		"esri/tasks/IdentifyParameters",
+		"esri/tasks/BufferParameters",
+		"esri/geometry/normalizeUtils",
+		
+		"esri/tasks/PrintTask", "esri/tasks/PrintParameters", "esri/tasks/PrintTemplate",
+		
+		"esri/tasks/GeometryService",
+		"esri/config",
+        "dojo/query",
+        "esri/dijit/Scalebar",
+        "esri/dijit/BasemapToggle",
+        "esri/dijit/LayerList",
+        "esri/dijit/Print",
+        "esri/toolbars/draw",
+        "esri/SpatialReference",
+        "esri/symbols/SimpleMarkerSymbol",
+        "esri/Color",
+        "esri/InfoTemplate",
+        "esri/graphic",
+        "esri/geometry/Polyline",
+        "esri/symbols/SimpleLineSymbol",
+        "esri/geometry/Polygon",
+        "esri/symbols/SimpleFillSymbol",
+        "esri/symbols/PictureMarkerSymbol",
+        "esri/symbols/CartographicLineSymbol",	
+		"dojo/_base/array",
+		"dojo/parser",
+		"esri/tasks/query",
+		"esri/tasks/QueryTask",
+        "dojo/on",
+		"esri/geometry/Extent",
+        "esri/geometry/Multipoint",
+        "esri/geometry/jsonUtils",
+        "dojo/store/JsonRest",
+        "esri/dijit/Measurement",
+		"esri/InfoTemplate", 
+		"dijit/form/Button",
+		
+        "dojo/domReady!"
+          ],
+        function(Map,		
+        ArcGISTiledMapServiceLayer,
+        LayerInfo,
+        ArcGISDynamicMapServiceLayer,
+		FeatureLayer,
+		UniqueValueRenderer,
+		SimpleRenderer,
+		ClassBreaksRenderer,
+		HeatmapRenderer,
+		ScaleDependentRenderer,
+		DotDensityRenderer,
+        Navigation,
+        OverviewMap,	
+        BasemapGallery,
+        BookmarkItem,
+        Bookmarks,
+        Point,
+        dom,
+		FindTask, FindParameters, IdentifyTask, IdentifyParameters,
+		BufferParameters,normalizeUtils, 
+		PrintTask, PrintTemplate, PrintParameters, 		
+		GeometryService,
+		esriConfig,
+        query,
+        Scalebar,
+        BasemapToggle,
+        LayerList,
+        Print,
+        Draw,
+        SpatialReference,
+        SimpleMarkerSymbol,
+        Color,
+        InfoTemplate,
+        Graphic,
+        Polyline,
+        SimpleLineSymbol,
+        Polygon,
+        SimpleFillSymbol,
+        PictureMarkerSymbol,
+        CartographicLineSymbol,
+		array,
+		parser,
+		Query,
+		QueryTask,
+        on,
+		Extent,
+        Multipoint,
+        geometryJsonUtils,
+        JsonRest,
+        Measurement,
+		
+        Units
+		
+         )  {
+	            //esri.config.defaults.io.corsDetection=false;
+                map = new esri.Map("map", {logo:false,slider:false, nav:false, center: [116, 40], zoom: 4,basemap:"streets" } );
+                //var basemap = new ArcGISTiledMapServiceLayer("http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer");//底图
+                //map.addLayer(basemap);
+				var basemap = new ArcGISTiledMapServiceLayer("http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer");//底图
+                map.addLayer(basemap);
+				var dian = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/data/pm25/MapServer");//点图层
+                map.addLayer(dian);
+				
+				var pm25 = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/data/river/MapServer");//点图层
+                map.addLayer(pm25);
+               
+                var tielu = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/data/rail/MapServer");//线图层
+                map.addLayer(tielu);				
+				var road = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/data/road/MapServer");//线图层
+                map.addLayer(road);
+				
+				var shiji = new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/data/shiji/MapServer");//线图层
+                map.addLayer(shiji);
+				var serverUrl = "http://localhost:6080/arcgis/rest/services/data/shiji/MapServer";
+			
+			//地图导航
+			var navToolbar = new Navigation(map);
+        dojo.query(".btn").on("click",mapNavigation);
+        function mapNavigation()
+        {
+             var value=this.innerHTML;
+             switch(value)
+             {
+                 case "全图":
+                 {
+
+                     navToolbar.zoomToFullExtent()
+                     break;
+                 }
+                 case "上一视图":
+                 {
+                     navToolbar.zoomToPrevExtent()
+                     break;
+                 }
+                 case "下一视图":
+                 {
+                     navToolbar.zoomToNextExtent()
+                     break;
+                 }
+
+                 case "缩小":
+                 {
+
+                    navToolbar.activate(Navigation.ZOOM_OUT);
+                    break;
+                 }
+                 case "放大":
+                 {
+                     navToolbar.activate(Navigation.ZOOM_IN);
+                     break;
+                 }
+                 case "漫游":
+                 {
+                     navToolbar.activate(Navigation.PAN);
+                    break;
+                 }
+				case"左移":
+                    {
+                        map.panLeft();
+                        break;
+                    }
+                case"右移":
+                    {
+                        map.panRight();
+                        break;
+                    }
+                 case "中心点":
+                 {
+                     var point = new Point([108.953364,34.347269]);
+                     map.centerAt(point);
+                    break;
+                 }
+             }  
+        }
+		//图层小部件控制
+		$("#CBasemapGallery").click(function () {
+				$("#changlang").toggle()
+				});	
+		$("#CBookmarks").click(function () {
+				$("#shuqian").toggle()
+				});	
+		$("#Cmeasurement").click(function () {
+				$("#ceiliang").toggle()
+				});	
+		$("#fanwei1").click(function () {
+				$("#fanwei").toggle()
+				});	
+		$("#zuobiao1").click(function () {
+				$("#coordinate").toggle()
+				});
+		$("#qiehuanqi").click(function () {
+				$("#ditu").toggle();
+				});
+		
+		/*document.getElementById("BasemapGallery").style.visibility="hidden";//隐藏
+		document.getElementById("Bookmarks").style.visibility="hidden";//隐藏
+		document.getElementById("basemapToggle").style.visibility="hidden";//隐藏*/
+			
+                 //复选框
+        function showlayer()
+       {
+		   tielu.setVisibility(true);
+           shiji.setVisibility(true);
+         
+       }
+       function closelayer()
+       {
+           tielu.setVisibility(false);
+		   shiji.setVisibility(false); 
+       }
+       function showlayer1()
+       {
+            //设置可视图层
+            visible=[0];
+           dian.setVisibleLayers(visible);
+       }
+       function closelayer1()
+       {
+           visible=[-1];
+           dian.setVisibleLayers(visible); 
+           
+       }
+        setVisibility = function(){
+        var vals=dojo.byId("dian").checked;
+        console.log(vals);
+        var vals1=dojo.byId("xian").checked;
+        console.log(vals1);
+        if(vals==true){
+            showlayer();
+        }
+        if(vals==false){
+           closelayer();
+        }
+        if(vals1==true){
+           showlayer1();
+        }
+        if(vals1==false){
+          closelayer1()
+        }
+       }   
+		
+	   
+	   //属性查询
+            function attrFinfd() {
+                var findParameters = new FindParameters();
+                findParameters.returnGeometry = true;
+                findParameters.layerIds = [0];
+                findParameters.searchFields = ["Name1"];
+                findParameters.searchText = $("#serach").val();
+                findTask.execute(findParameters, showResult);
+            };			
+            //查询工具
+			var draw = new Draw(map);
+            var findTask = new FindTask(serverUrl)
+            //属性查询渲染函数
+            function showResult(result) {
+                map.graphics.clear();
+                //线符号
+                var lineSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new dojo.Color([0, 0, 255]), 3);
+                //面符号
+                var fillSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, lineSymbol);
+                if (result.length == 0) {
+                    alert("未查询到任何信息");
+                    return;
+                }
+                else {
+                    for (var i = 0; i < result.length; i++) {
+                        //获得图形graphic
+                        var graphic = result[i].feature;
+                        console.log(graphic);
+                        console.log(graphic.geometry.cache);
+                        //console.log(graphic.geometry.cache._extent);
+                        //赋予相应的符号
+                        graphic.setSymbol(lineSymbol);
+                        //将graphic添加到地图中，从而实现高亮效果
+                        map.graphics.add(graphic);
+                    }
+
+                }
+
+            }		
+			//查询
+		//地图服务的URL
+					
+					var MapServer = "http://localhost:6080/arcgis/rest/services/data/shiji/MapServer";
+					//创建属性查询对象
+					var findTask = new FindTask(MapServer);
+					//创建属性查询参数
+					var findParams = new FindParameters();
+					
+					dojo.connect(dojo.byId("Find"),"onclick",function(){  
+					console.log("Find");
+					var findParameters = new FindParameters();//创建FindParameters
+					findParameters.contains = true;//是否接受模糊查找,如果仅仅进行模糊查询，不需要where，设
+					//是否返回给我们几何信息
+					findParams.returnGeometry = true;
+					//对哪一个图层进行属性查询
+					findParams.layerIds = [0];
+					//查询的字段
+					findParams.searchFields = ["Name1"];
+					//searchText和searchFields结合使用
+					var searchTxt=dojo.byId("serach").value;
+					findParams.searchText = searchTxt;
+					//执行查询对象
+					findTask.execute(findParams, ShowFindResult);
+					});
+						function ShowFindResult(queryResult) {
+					map.graphics.clear();
+					// 创建点符号
+					var pointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 8, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0,0,255, 0.3]), 10), new Color([0,0,255,0.8]));
+					//创建线符号
+					var lineSymbol=new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new dojo.Color([255, 0, 0]), 3);
+					//创建面符号
+					var fill=new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, lineSymbol);					
+					
+					if (queryResult.length == 0) {
+						alert("查询无结果");
+                    return;
+					}
+					var htmls = "";
+					if (queryResult.length >= 1) {
+						
+						for (var i = 0; i < queryResult.length; i++) {
+							//获得图形graphic
+							var graphic = queryResult[i].feature;
+							//赋予相应的符号
+							graphic.setSymbol(fill);
+							//graphic.setInfoTemplate(infoTemplate2);//infoTemplate
+							//将graphic添加到地图中，从而实现高亮效果
+							map.graphics.add(graphic);
+							
+						}
+						
+					}
+				}
+				
+            //属性查询
+            $("#attrSerach").click(function () {
+                if ($("#serach").text() == null) {
+                    alert("请输入查询条件");
+                    return;
+                }
+                
+                attrFinfd();
+                
+            });
+			//清除
+            $("#del").click(function () {
+
+                $("#divShowResult").html = "";
+                $("#divShowResult").hide();
+                map.graphics.clear();
+            });
+			
+		//打印服务
+				var template = new PrintTemplate();
+				template.format = "JPG";
+				template.layout = "A4 Landscape";
+				template.layoutOptions = {
+					"titleText": "中国PM2.5监测热力图",
+					"scalebarUnit": "Kilometers",
+					//"copyrightText": "北华航天工业学院",
+					"showAttribution": false,
+					"legendLayers": []
+				}
+				template.preserveScale = true;
+
+				var params = new PrintParameters();
+				params.map = map;
+				params.template = template;
+
+				var printTask = new PrintTask("http://localhost:6080/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task");
+
+				/*var printbutton = new Button({
+					label: '打印',
+					onClick: function () {
+						printTask.execute(params, printResult, printError);
+					}
+				}, document.getElementById("printButton"));*/
+				
+				$("#printButton").click(function () {
+                printTask.execute(params, printResult, printError);
+				
+				});	
+
+				function printResult(result) {
+					window.open(result.url, "_blank")
+				}
+
+				function printError(error) {
+					alert(error);
+				}
+								
+			
+			
+			//空间查询
+		  var nameArr=[];//用于存储查询地点名称
+          var shapeArr=[];//用于存储查询shape
+          var areaArr=[];//用于存储面积
+		var ac = new Draw(map);
+                
+
+            var pointSymbol = new SimpleMarkerSymbol(//定义点符号
+                        SimpleMarkerSymbol.STYLE_CIRCLE, 10,
+                        new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                            new Color([255,0,0]), 1),
+                        new Color([255,0,0]));
+            var outline= new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT,new Color([255, 0, 0]), 1); //定义面的边界线符号
+            var PolygonSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, outline,new Color([0, 255, 0, 1])); //定义面符号
+
+            query("#scs").on("click",function(){
+                map.graphics.clear();//清空graphics
+				$("#biaoge").toggle();
+                ac.activate(Draw["POLYGON"]);
+                ac.on("draw-end", doIdentify);
+            });
+            function doIdentify(evt){
+                ac.deactivate();
+                //添加draw画的区域
+                map.graphics.add(new Graphic(evt.geometry,PolygonSymbol));
+                // 实例化IdentifyTask
+                var identifyTask = new IdentifyTask("http://localhost:6080/arcgis/rest/services/data/pm25/MapServer");
+                // IdentifyTask参数设置
+                identifyParams = new IdentifyParameters();
+                // 冗余范围
+                identifyParams.tolerance = 3;
+                // 返回地理元素
+                identifyParams.returnGeometry = true;
+                // 进行Identify的图层
+                identifyParams.layerIds = [0];
+                // 进行Identify的图层为全部
+                identifyParams.layerOption = IdentifyParameters.LAYER_OPTION_ALL;
+                // Identify的geometry
+                identifyParams.geometry = evt.geometry;
+                // Identify范围
+                identifyParams.mapExtent = map.extent;
+                identifyTask.execute(identifyParams,showFindResult);
+            };
+            
+            function showFindResult(queryResult){
+                //初始化信息暂存数组
+                nameArr=[];
+                shapeArr=[];
+                areaArr=[];
+                if (queryResult.length === 0) {
+                    alert("查询无结果");
+                    return;
+                }
+                for (var i = 0; i < queryResult.length; i++) {
+                    nameArr[i]=queryResult[i].feature.attributes.城市名;
+                    shapeArr[i]=queryResult[i].feature.attributes.监测点;
+                    areaArr[i]=queryResult[i].feature.attributes.AQI;
+                    //定义高亮图形的符号
+                    var graphic ={}; //创建graphic
+                    var locationPoint ={};//创建定位点
+                    var geometry = queryResult[i].feature.geometry;//获得该图形的形状
+                    if(geometry.type ==="polygon"){
+                        graphic = new Graphic(geometry, PolygonSymbol);
+                        locationPoint=geometry.getCentroid();
+                    }
+                    else if(geometry.type ==="point"){
+                        graphic = new Graphic(geometry, pointSymbol);
+                        locationPoint=geometry;
+                    }
+                    //将图形添加到map中
+                    map.graphics.add(graphic);
+                    //map.centerAndZoom(locationPoint,5);
+                }
+                var html="";
+                for(var i=0;i<nameArr.length;i++){
+                    html+="<tr>" +
+                            " <td >"+nameArr[i]+"</td>" +
+                            "<td >"+shapeArr[i]+"</td>" +
+                            "<td >"+areaArr[i]+"</td>"+
+                        "</tr>";
+                }
+                dom.byId("infoBody").innerHTML =html;
+            }
+			
+	   //加载featurelayer
+								
+		var infoTemplate = new InfoTemplate("${point}", "${*}");
+		var featureLayer = new FeatureLayer("http://localhost:6080/arcgis/rest/services/data/pm25/MapServer/0",{
+					mode: FeatureLayer.MODE_ONDEMAND,
+					infoTemplate: infoTemplate,
+					outFields: ["*"],
+					opacity:0.1
+				  });
+				  map.addLayer(featureLayer);
+				  
+		//分级色彩渲染器
+		//获得id为btn的DOM元素
+			var acd=dom.byId("simpleRender2");
+			//绑定相应的事件
+			on(acd,"click",function(){
+				//定义一个要素图层
+				var featureLayer = new FeatureLayer(
+				"http://localhost:6080/arcgis/rest/services/data/pm25/MapServer/0",
+				 {
+					mode:FeatureLayer.MODE_SNAPSHOT,
+					outFields: ["*"]
+				 });
+				 //定义点符号
+				
+				 /*//定义线符号
+				var lineSymbol=new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new Color([255, 0, 0]), 3);
+				//定义面符号
+				var fill=new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, lineSymbol,new Color("#FFFFCC"));*/
+				//定义唯一值渲染器，对字段alias进行渲染，fill是默认的渲染符号
+				
+				var renderer = new ClassBreaksRenderer(null, "CPM25");
+				var outline = new SimpleLineSymbol().setWidth(0.5).
+				setColor(new Color([43,101,236,1]));
+				var color = new Color([43,101,236,0.75]);
+				var classBreaks=
+				[
+					{minValue:0,maxValue:35,size:4},
+					{minValue:36,maxValue:75,size:6},
+					{minValue:76,maxValue:115,size:8},
+					{minValue:116,maxValue:150,size:10},
+					{minValue:151,maxValue:250,size:12},
+					{minValue:250,maxValue:500,size:14}
+				];
+				array.forEach(classBreaks,function(classBreak)
+				{
+					renderer.addBreak(classBreak.minValue,classBreak.maxValue,new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE,classBreak.size,outline,color));
+				});
+				//renderer.backgroundFillSymbol=new SimpleFillSymbol().setColor(new color([255,0,0,0])).
+				featureLayer.setRenderer(renderer);
+				map.addLayer(featureLayer);				 
+			});
+			//点密度渲染
+			//获得id为btn的DOM元素
+			var BCD=dom.byId("simpleRender3");
+			//绑定相应的事件
+			on(BCD,"click",function(){
+				var layerUrl = "http://localhost:6080/arcgis/rest/services/data/sheng/MapServer/0";
+            var layer = new FeatureLayer(layerUrl, {
+                infoTemplate: new InfoTemplate("${CPM25}", "${*}"),
+                mode: FeatureLayer.MODE_ONDEMAND,
+                outFields: ["*"]
+            });
+
+            var renderer = new DotDensityRenderer({
+                //backgroundColor: new Color("#FFFFFF"),
+                outline: new SimpleLineSymbol().setColor(new Color([0,0,255])),
+                fields: [{
+                    name: "ARER",
+                    color: new Color("#FF0000")
+                }],
+                dotShape: "circle",
+                dotValue: 2000,
+                dotSize: 1
+            });
+            layer.setRenderer(renderer);
+            map.addLayers([layer]);
+			 
+			});
+			//热力图渲染
+		    var ACD=dom.byId("simpleRender4");
+			//绑定相应的事件
+			on(ACD,"click",function(){
+				$("#constainer").toggle();
+				var layer = new FeatureLayer("http://localhost:6080/arcgis/rest/services/data/pm25/MapServer/0", {
+                    outFields: ["*"],
+                    mode: FeatureLayer.MODE_SNAPSHOT
+                })
+			
+                var heatmapRenderer = new HeatmapRenderer({
+                    field: "CPM25",
+					blurRadius: 1,
+                    maxPixelIntensity: 30,
+                    minPixelIntensity: 0
+                });
+
+
+                on(dojo.byId("blurControl"), "change", function () {
+                    console.log(this.value)
+                    heatmapRenderer.blurRadius = this.value;
+                    layer.redraw();
+                })
+                on(dojo.byId("maxControl"), "change", function () {
+                    console.log(this.value)
+                    heatmapRenderer.maxPixelIntensity = this.value;
+                    layer.redraw();
+                })
+                on(dojo.byId("minControl"), "change", function () {
+                    console.log(this.value)
+                    heatmapRenderer.minPixelIntensity = this.value;
+                    layer.redraw();
+                })
+
+                layer.setRenderer(heatmapRenderer);
+                map.addLayer(layer)
+			 
+			});
+			//尺寸大小渲染			 
+			 dojo.connect(dojo.byId("simpleRender1"),"onclick",simpleRenderer1);
+			 function simpleRenderer1() {
+                 //  创建点符号
+                 var smSymbol = new SimpleMarkerSymbol();
+                 smSymbol.setColor(new Color([0, 255, 0]));
+                 smSymbol.setOutline(null);
+				 
+				
+                  // 使用简单渲染器         
+                 var smpRenderer = new SimpleRenderer(smSymbol);
+				 
+				 
+                 //为渲染器创建符号分级               
+                 var sizeInfo = {
+                     field: "AQI",
+                     valueUnit: "AQI",
+                     minSize: 1,
+                     maxSize: 20,
+                     minDataValue: 0,
+                     maxDataValue: 400
+                 };
+                 //为渲染器应用符号分级               
+                 smpRenderer.setSizeInfo(sizeInfo);
+				 
+				 //为一个图层设置图层渲染器，也可以认为是图层的符号化方式
+				 var infoTemplate = new InfoTemplate("${point}", "${*}");
+					var featureLayer = new FeatureLayer("http://localhost:6080/arcgis/rest/services/data/pm25/MapServer/0",{
+					mode: FeatureLayer.MODE_ONDEMAND,
+					infoTemplate: infoTemplate,
+					outFields: ["*"],
+					opacity:0.5
+				  });				 
+                featureLayer.setRenderer(smpRenderer);//图层设置渲染器
+				map.addLayer(featureLayer);
+				//map.setZoom(4);
+             } 
+		
+				
+				 //比例尺显示
+		require(["esri/dijit/Scalebar"], function(Scalebar) {
+		    var scalebar = new Scalebar({
+		          map: map,
+		          attachTo: "bottom-center",
+		          scalebarUnit: "dual"
+		        });
+		 });
+		 //鹰眼
+		 require(["esri/dijit/OverviewMap"], function(OverviewMap) {
+		    var overviewMapDijit = new OverviewMap({
+		        map: map,
+		        attachTo: "bottom-right",
+				width: 246,	// 默认值是地图高度的 1/4th
+				height: 130, // 默认值是地图高度的 1/4th 
+				opacity: .40,	 // 透明度	默认0.5
+				maximizeButton: true,	// 最大化,最小化按钮，默认false
+		        color:" #D84E13",
+		        visible: true
+		    });
+		    overviewMapDijit.startup();
+		});
+		//图例
+		   //var legend = new Legend({
+               //   map: map
+                //}, "legend");
+               //legend.startup();
+		//书签Bookmarks
+			var bookmarks = new Bookmarks({
+            map: map,
+            bookmarks: [],
+            editable: true
+          }, "bookmarks");
+			//实例
+			var bookmarkJSON = {
+            first:{
+              "extent": {
+                "xmin": 12994072,
+                "ymin": 4796909,
+                "xmax": 12995552,
+                "ymax": 4797709,
+                "spatialReference": {
+                  "wkid": 102100,
+                  "latestWkid": 3857
+                }
+              },
+              "name": "北华航天工业学院"
+            },
+          };
+			Object.keys(bookmarkJSON).forEach(function (bookmark){
+            bookmarks.addBookmark(bookmarkJSON[bookmark]);
+          });
+			
+		//底图库
+			var basemapGallery = new BasemapGallery({
+			showArcGISBasemaps: true,
+			map: map
+		}, "basemapGallery");
+		basemapGallery.startup();
+      
+      	basemapGallery.on("error", function(msg) {
+        console.log("basemap gallery error:  ", msg);
+        });
+				
+
+      	//底图切换器
+      	var basemapToggle = new BasemapToggle({
+		  map: map,
+		  visible: true,
+		  basemap: "satellite"
+		}, "BasemapToggle");
+		basemapToggle.startup();
+
+        //测量工具
+             var customPolyline = new Polyline({"wkid":102100});
+             customPolyline.addPath([
+             new Point(118.88,42.25), //赤峰
+             new Point(117.18,36.63), //济南
+             new Point(117.259,39.017)//天津
+             ]);
+
+             var measurement = new Measurement({
+             //geometry: customPolyline,
+              map: map
+             }, dom.byId("measurement"));
+              measurement.startup();
+		 //鼠标移动式显示坐标
+		function showCoordinates(evt)
+		{
+			var mp = evt.mapPoint;
+			dojo.byId("coordinate").innerHTML = mp.x+","+mp.y;
+		}
+		map.on("mouse-move",showCoordinates);
+		//获取当前试图范围改变时的xmin,xmax,ymin,ymax
+		function showExtent(){
+            var x="";
+            x = "Xmin:"+ map.extent.xmin+"<br/>"
+                +"Ymin:" + map.extent.ymin+"<br/>"
+                +"Xmax:" + map.extent.xmax+"<br/>"
+                +"Ymax:" + map.extent.ymax;
+                dojo.byId("extent").innerHTML = x;
+        }
+        map.on("extent-change",showExtent);
+		//实验六
+    //绘制json数据
+      //绘制点符号
+        /* var sms =  new SimpleMarkerSymbol({
+            "color": [255,255,255,64],
+            "size": 5,
+            "angle": -30,
+            "xoffset": 0,
+            "yoffset": 0,
+            "type": "esriSMS",
+            "style": "esriSMSCircle",
+            "outline": {
+              "color": [0,0,0,255],
+              "width": 0.2,
+              "type": "esriSLS",
+              "style": "esriSLSSolid"
+            }
+          });
+         //绘制线符号
+          var cLS = new CartographicLineSymbol(CartographicLineSymbol.STYLE_LONGDASHDOT, new Color([255,0,0]), 1, CartographicLineSymbol.CAP_ROUND, CartographicLineSymbol.JOIN_MITER, 5);
+          //绘制面符号
+          var sfs = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT,new Color([5,39,175,0]), 0),new Color([5,39,175,0.6]))
+          //等待地图加载完毕后
+           map.on("load",function(){
+            var polylineJson = {
+                "paths":[[]],
+                "spatialReference":{"wkid":4326}
+              };
+              var polygonJson = {
+                "rings":[[]],
+                "spatialReference":{"wkid":4326}
+              }; 
+            //遍历json，添加数据
+            for(var k in china){
+              var zuobiao=china[k];
+              var x=zuobiao[0];
+              var y=zuobiao[1];
+              //绘制点符号，将符号点加紧地图中，并显示提示框
+              var pt = new Point(x,y, new SpatialReference({ wkid: 4326 }));
+              var attr = {"Xcoord":x,"Ycoord":y,"Plant":k};
+              var infoTemplate = new InfoTemplate("${Ycoord}<br/>${Xcoord}<br/>${Plant}");
+              var graphic1 = new Graphic(pt,sms,attr,infoTemplate);
+              map.graphics.add(graphic1);
+              //向线json和免接送
+              polylineJson.paths[0].push(zuobiao);
+              polygonJson.rings[0].push(zuobiao);
+            }
+            $(".city-point").on("click",function(){
+                $("#map_graphics_layer circle").fadeToggle();
+            })
+            $(".city-line").on("click",function(){
+                $("#map_graphics_layer path[fill=none]").fadeToggle();
+            })
+            $(".city-polygin").on("click",function(){
+                $("#map_graphics_layer path[fill^=rgb]").fadeToggle();
+            })  
+				
+			$(".but").on("click",function() {
+				$(".abc").toggle();
+			 })
+
+        }) */
+	//几何绘制
+		//map.on("load", initToolbar);
+        // 简单标记符号
+        var markerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 10, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([255,0,0]), 1), new Color([0,255,0,0.25]));
+        
+
+        // 线符号
+        var lineSymbol = new CartographicLineSymbol(
+          SimpleLineSymbol.STYLE_DASH, new Color([255,0,0]), 1
+        );
+
+        //面符号和图片符号
+        var sfs = new SimpleFillSymbol(SimpleFillSymbol.STYLE_NONE, new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT, new Color([255,0,0]), 2), new Color([255,255,0,0.25]));
+
+        function initToolbar() {
+          cc = new Draw(map);
+          cc.on("draw-end", addGraphic);
+
+          //点击事件选择
+          on(dom.byId("draw"), "click", function(evt) {
+            if ( evt.target.id === "info" ) {
+              return;
+            }
+            var tool = evt.target.id.toLowerCase();
+            map.disableMapNavigation();
+            cc.activate(tool);
+          });
+        }
+
+        function addGraphic(evt) {
+          //激活绘图工具清除存在图形
+			cc.deactivate(); 
+          map.enableMapNavigation();
+
+          // 找出用哪种符号
+          var sbl;
+		  console.log(evt.geometry.type);
+          if ( evt.geometry.type === "point" || evt.geometry.type === "multipoint") {
+            sbl = markerSymbol;
+          } else if ( evt.geometry.type === "line" || evt.geometry.type === "polyline") {
+            sbl = lineSymbol;
+          }else{
+            sbl = sfs;
+          }
+		  console.log(sbl);
+
+          map.graphics.add(new Graphic(evt.geometry, sbl));
+        }
+	 //缓冲区分析
+	 
+	 esriConfig.defaults.geometryService = new GeometryService("http://localhost:6080/arcgis/rest/services/Utilities/Geometry/GeometryServer");
+
+        on(dom.byId("clearGraphics"), "click", function(){
+          if(map){
+            map.graphics.clear();
+          }
+        });
+        //点击绘制图形
+        query(".toolbar").on("click", function(evt){
+          if(ac){
+           ac.activate(evt.target.id);
+          }
+        });
+
+        map.on("load", initToolbar);
+
+
+
+      function initToolbar(evtObj) {
+        ac = new Draw(evtObj.map);
+        ac.on("draw-end", doBuffer);
+      }
+
+      function doBuffer(evtObj) {
+        ac.deactivate();
+        var geometry = evtObj.geometry, symbol;
+        switch (geometry.type) {
+           case "point":
+             symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 10, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([255,0,0]), 1), new Color([0,255,0,0.25]));
+             break;
+           case "polyline":
+             symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new Color([255,0,0]), 1);
+             break;
+           case "polygon":
+             symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_NONE, new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT, new Color([255,0,0]), 2), new Color([255,255,0,0.25]));
+             break;
+        }
+
+          var graphic = new Graphic(geometry, symbol);
+          map.graphics.add(graphic);
+
+          //缓冲区设置
+          var params = new BufferParameters();
+          params.distances = [60];
+          params.outSpatialReference = map.spatialReference;
+          params.unit = GeometryService.UNIT_KILOMETER;
+          //标准化几何形状
+          normalizeUtils.normalizeCentralMeridian([geometry]).then(function(normalizedGeometries){
+            var normalizedGeometry = normalizedGeometries[0];
+            if (normalizedGeometry.type === "polygon") {
+              //让几何形状的拓扑正确
+              esriConfig.defaults.geometryService.simplify([normalizedGeometry], function(geometries) {
+                params.geometries = geometries;
+                esriConfig.defaults.geometryService.buffer(params, showBuffer);
+              });
+            } else {
+              params.geometries = [normalizedGeometry];
+              esriConfig.defaults.geometryService.buffer(params, showBuffer);
+            }
+
+          });
+        }
+
+        function showBuffer(bufferedGeometries) {
+          var symbol = new SimpleFillSymbol(
+            SimpleFillSymbol.STYLE_SOLID,
+            new SimpleLineSymbol(
+              SimpleLineSymbol.STYLE_SOLID,
+              new Color([255,0,0,0.65]), 2
+            ),
+            new Color([255,0,0,0.35])
+          );
+
+          array.forEach(bufferedGeometries, function(geometry) {
+            var graphic = new Graphic(geometry, symbol);
+            map.graphics.add(graphic);
+          });
+		
+        }
+		
+	//分析
+	/*var queryTask = new QueryTask("http://localhost:6080/arcgis/rest/services/data/pm25/MapServer");
+		function  queryGraphic(geometry) {
+          var query = new Query();
+          query.geometry = geometry;
+          query.outFields = ["*"];
+          query.outSpatialReference = map.spatialReference;
+          query.spatialRelationship = Query.SPATIAL_REL_INTERSECTS;
+          query.returnGeometry = true;
+          queryTask.execute(query,show);
+        }
+	function  show(queryResult) {
+			map.graphics.clear();
+		var simplemarkersymbol =  new SimpleMarkerSymbol({
+			"type": "esriSMS",
+			"style": "esriSMSCircle",
+			"color": [255, 115, 0, 128],
+			"size": 6,
+			"outline": {"color": [255, 0, 0, 214],"width": 1}
+			})
+		var htmls = "";
+		htmls = htmls + "<table style=\"width: 1000px\">"; 
+				htmls = htmls + "<tr><td>FID<\/td><td>ID<\/td><td>城市名<\/td><td>监测点<\/td><td>PM2.5<\/td><\/tr>"; 
+				for (var i = 0; i < queryResult.features.length; i++) {
+					var graphic = queryResult.features[i];
+						graphic.setSymbol(simplemarkersymbol);
+						map.graphics.add(graphic);
+						var FID = graphic.attributes["FID"];
+						var ID = graphic.attributes["ID"];
+						var 城市名 = graphic.attributes["城市名"];
+						var 监测点 = graphic.attributes["监测点"];
+						var CPM25 = graphic.attributes["CPM25"];
+
+						htmls = htmls + "<td>" + FID + "<\/td>" 
+									  + "<td>" + ID + "<\/td>" 
+									  + "<td>" + 城市名 + "<\/td>" 
+									  + "<td>" + 监测点 + "<\/td>" 
+									  + "<td>" + CPM25 + "<\/td>";
+						htmls = htmls + "<\/tr>";
+					}
+				htmls = htmls + "<\/table>";
+				dom.byId("table").innerHTML = htmls;
+	}*/
+	
+	
+	})
+    </script>
+	
+</html>
